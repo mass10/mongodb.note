@@ -1,3 +1,2 @@
-# mongodb.note
-
-
+- [Wiki](../../wiki)
+- 
