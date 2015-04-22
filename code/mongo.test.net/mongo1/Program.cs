@@ -11,6 +11,7 @@ using MongoDB.Driver.Core.Connections;
 using MongoDB.Driver.Core.Bindings;
 using MongoDB.Driver.Linq;
 using MongoDB.Driver.Linq.Utils;
+using Newtonsoft.Json;
 
 namespace mongo1
 {
@@ -65,9 +66,12 @@ namespace mongo1
 				{
 					while (await cursor.MoveNextAsync())
 					{
-						foreach (var doc in cursor.Current)
+						foreach (var e in cursor.Current)
 						{
-							Console.WriteLine("" + doc.ToJson() + "]");
+							e.Remove("_id");
+							string s = e.ToJson();
+							s = Util.FormatJson(s);
+							Console.WriteLine(s);
 						}
 					}
 				}
@@ -109,11 +113,15 @@ namespace mongo1
 				var list = await result.ToListAsync<BsonDocument>();
 				foreach (var e in list)
 				{
-					Console.WriteLine(e.ToJson());
+					e.Remove("_id");
+					string s = e.ToJson();
+					s = Util.FormatJson(s);
+					Console.WriteLine(s);
 				}
 
 				Console.WriteLine("抽出処理(その2): END (処理時間=" + watch.Elapsed + ")");
 			}
 		}
+
 	}
 }
