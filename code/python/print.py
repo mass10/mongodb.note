@@ -2,30 +2,34 @@
 # coding: utf-8
 
 
-import sys
 import pymongo
 import json
-import codecs
+import datetime
 
-#def Print(*args):
-#	out = codecs.getwriter('utf-8')(sys.stdout)
-#	for e in args:
-#		out.write(e)
-#	out.write("\n")
+def _conversion(unknown):
 
-def Main():
+	if isinstance(unknown, datetime.datetime):
+		return unknown.isoformat()
+	try:
+		return str(unknown)
+	except:
+		raise TypeError(repr(unknown) + " is not JSON serializable")
 
-	print '### 開始 ###'
+def _main():
 
 	client = pymongo.MongoClient('localhost', 27017, )
+
 	db = client['test']
+
 	collection = db['sakaguradb']
+
 	for e in collection.find():
+
+		# 表示用に _id を消す
 		e['_id'] = "..."
 		# del e['_id']
-		print json.dumps(e, ensure_ascii=False, sort_keys=True, indent=4)
+		print json.dumps(e, ensure_ascii=False,
+				sort_keys=True, indent=4, default=_conversion)
 
-	print '--- end ---'
-
-Main()
+_main()
 
