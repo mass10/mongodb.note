@@ -1,2 +1,1 @@
-[Wiki](../../wiki)
-
+examples.
